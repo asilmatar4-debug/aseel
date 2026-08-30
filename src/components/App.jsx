@@ -1,0 +1,122 @@
+import { useState } from "react";
+import Product from "./product.jsx";
+import { FaShoppingCart } from "react-icons/fa";
+
+function App() {
+  const products = [
+    {
+      id: 1,
+      title: "Essence Mascara Lash Princess",
+      description:
+        "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects.",
+      price: 9.99,
+      thumbnail:
+        "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
+    },
+    {
+      id: 2,
+      title: "Eyeshadow Palette with Mirror",
+      description:
+        "The Eyeshadow Palette with Mirror offers a versatile range of shades for creating beautiful eye looks.",
+      price: 19.99,
+      thumbnail:
+        "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
+    },
+    {
+      id: 3,
+      title: "Powder Canister",
+      description:
+        "The Powder Canister is a finely milled setting powder designed to set makeup and control shine.",
+      price: 14.99,
+      thumbnail:
+        "https://cdn.dummyjson.com/product-images/beauty/powder-canister/thumbnail.webp",
+    },
+  ];
+
+  const [cart, setCart] = useState([]);
+
+  function addToCart(product) {
+    const existingProduct = cart.find(
+      (item) => item.id === product.id
+    );
+
+    if (existingProduct) {
+      const updatedCart = cart.map((item) =>
+        item.id === product.id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+
+      setCart(updatedCart);
+    } else {
+      setCart([
+        ...cart,
+        {
+          ...product,
+          quantity: 1,
+        },
+      ]);
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-pink-50">
+      <div className="flex justify-between items-center p-6 bg-white shadow">
+        <h1 className="text-3xl font-bold">
+          Products
+        </h1>
+
+        <div className="flex items-center gap-2">
+          <FaShoppingCart />
+          <span>
+            Cart:{" "}
+            {cart.reduce(
+              (total, item) => total + item.quantity,
+              0
+            )}
+          </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8">
+        {products.map((product) => (
+          <Product
+            key={product.id}
+            product={product}
+            addToCart={addToCart}
+          />
+        ))}
+      </div>
+
+      <div className="p-8">
+        <h2 className="text-2xl font-bold mb-4">
+          My Cart
+        </h2>
+
+        {cart.length === 0 ? (
+          <p>Your cart is empty</p>
+        ) : (
+          cart.map((item) => (
+            <div
+              key={item.id}
+              className="bg-white p-4 mb-3 rounded-lg shadow"
+            >
+              <h3 className="font-bold">
+                {item.title}
+              </h3>
+
+              <p>
+                Quantity: {item.quantity}
+              </p>
+              <p>
+                Price: ${(item.price * item.quantity).toFixed(2)}
+              </p>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default App;
