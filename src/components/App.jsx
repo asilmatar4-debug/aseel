@@ -33,19 +33,17 @@ function App() {
     },
   ];
 
-  // قراءة السلة من localStorage أول ما التطبيق يشتغل
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem("cart");
 
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
-  // كل ما cart تتغير نحفظها في localStorage
+
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
-
-  // إضافة المنتج للسلة
+ 
   function addToCart(product) {
     const existingProduct = cart.find(
       (item) => item.id === product.id
@@ -73,7 +71,6 @@ function App() {
     }
   }
 
-  // حساب السعر مع الخصم
   function calculatePrice(item) {
     const totalPrice = item.price * item.quantity;
 
@@ -83,14 +80,11 @@ function App() {
 
     return totalPrice;
   }
-
-  // مجموع عدد القطع كلها
   const totalItems = cart.reduce(
     (total, item) => total + item.quantity,
     0
   );
 
-  // السعر الكلي للسلة بعد الخصومات
   const cartTotal = cart.reduce(
     (total, item) => total + calculatePrice(item),
     0
@@ -99,7 +93,6 @@ function App() {
   return (
     <div className="min-h-screen bg-pink-50">
 
-      {/* Header */}
       <div className="flex justify-between items-center p-6 bg-white shadow">
         <h1 className="text-3xl font-bold">
           Products
@@ -125,7 +118,6 @@ function App() {
         ))}
       </div>
 
-      {/* Cart */}
       <div className="p-8">
         <h2 className="text-2xl font-bold mb-4">
           My Cart
